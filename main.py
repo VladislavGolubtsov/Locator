@@ -40,6 +40,7 @@ def search(api_key, secret_key, language):
           f"\tдолгота: {result['geo_lon']}")
 
 
+# Функция для настройки параметров
 def settings():
     conn = sqlite3.connect('settings.db')
     cursor = conn.cursor()
@@ -111,6 +112,7 @@ def settings():
     conn.close()
 
 
+# Основная функция
 def main():
     conn = sqlite3.connect('settings.db')
     cursor = conn.cursor()
@@ -157,5 +159,6 @@ def main():
             break
 
 
+# Запуск основной функции при выполнении скрипта
 if __name__ == '__main__':
     main()
