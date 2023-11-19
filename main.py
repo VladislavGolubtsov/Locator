@@ -118,6 +118,7 @@ def settings():
 
 # Основная функция
 def main():
+    console_clear()
     conn = sqlite3.connect('settings.db')
     cursor = conn.cursor()
     cursor.execute('''
