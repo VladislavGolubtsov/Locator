@@ -1,10 +1,12 @@
 import sqlite3
+import os
 from dadata import Dadata
 
 
 # Функция для поиска координат по адресу
 def search(api_key, secret_key, language):
     dadata = Dadata(api_key, secret_key)
+    console_clear()
     line = input('Введите адрес: ')
 
     try:
@@ -12,7 +14,7 @@ def search(api_key, secret_key, language):
     except Exception as e:
         print(f"\n\nError fetching suggestions: {e}")
         return
-
+    console_clear()
     for id_version, key in enumerate(version, start=1):
         print(f"{id_version}. {key['value']}")
     print('0. Вернуться назад')
@@ -33,7 +35,7 @@ def search(api_key, secret_key, language):
         else:
             print("Пожалуйста, введите корректное значение.")
 
-    # Получение координат по выбранному адресу
+    console_clear()
     result = dadata.clean("address", version_pick)
     print(f"Координаты:\n"
           f"\tширота: {result['geo_lat']}\n"
@@ -58,6 +60,7 @@ def settings():
     row = cursor.fetchone()
 
     if row is None:
+        console_clear()
         print(f'Параметры не заданы!'
               f'\nApi-ключ и Секретный ключ можно получить после регистрации на сайте:'
               f'\n https://dadata.ru/profile/#info\n')
@@ -74,6 +77,7 @@ def settings():
 
     cursor.execute('SELECT * FROM settings')
     value = cursor.fetchall()
+    console_clear()
     print(f'\n Api-ключ и Секретный ключ можно получить после регистрации на сайте:'
           f'\n https://dadata.ru/profile/#info\n')
     print(f'\n1. API-ключ: {value[0][1]}')
@@ -128,6 +132,7 @@ def main():
 
     while True:
         while True:
+
             conn.commit()
             cursor.execute('SELECT * FROM settings')
             row = cursor.fetchone()
@@ -136,10 +141,11 @@ def main():
                   f"2. Настройки\n",
                   f"3. Выход")
             pick = input(f"\nВыберите один из предложенных вариантов"
-                        f"\nВведите значение и нажмите Enter: ")
+                         f"\nВведите значение и нажмите Enter: ")
             if pick == "1":
                 if row is None:
-                    print('\n\nПараметры не заданы!\nПерейдите в настройки')
+                    console_clear()
+                    print('Параметры не заданы!\nПерейдите в настройки')
                 else:
                     cursor.execute('SELECT * FROM settings')
                     value = cursor.fetchall()
@@ -148,6 +154,7 @@ def main():
                     language = value[0][3]
                     search(api_key, secret_key, language)
             elif pick == "2":
+                console_clear()
                 settings()
             elif pick == "3":
                 i = -1
@@ -159,6 +166,9 @@ def main():
             break
 
 
-# Запуск основной функции при выполнении скрипта
+def console_clear():
+    os.system('cls||clear')
+
+
 if __name__ == '__main__':
     main()
